@@ -1,0 +1,15 @@
+table_def:
+  table_source: user
+  table_destination: phpBB_user
+col_def:
+  - col1: ID
+    col2: uid
+
+  - col1: uname
+    col2: user_name
+
+  - col1: age
+    col2: age
+
+  - col1: password
+    col2: pass
