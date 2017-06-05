@@ -5,11 +5,14 @@ col_def:
   - col1: ID
     col2: uid
 
+
   - col1: uname
     col2: user_name
+    function: to_upper_case
 
   - col1: age
     col2: age
 
   - col1: password
     col2: pass
+    function: to_upper_case

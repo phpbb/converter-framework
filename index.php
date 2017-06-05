@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__.'/converter/Converter.php';
+require_once __DIR__.'/converter/converter_logger.php';
+require_once __DIR__.'/converter/util_conversion_functions.php';
 // require_once __DIR__.'/vendor/autoload.php';
 // use Symfony\Component\Yaml\Yaml;
 // $map=Yaml::parse(file_get_contents('user_to_phpBB_user.yml'));
@@ -13,6 +15,12 @@ require_once __DIR__.'/converter/Converter.php';
 // print_r($source_col);
 // echo '<br/>'.$map_obj->table_def['table_source'];
 $converter_obj = new Converter("phpBBgsoc","root", "123");
-$converter_obj->begin_conversion('user_to_phpBB_user.yml');
+//$converter_obj->build_process_queue();
+// $logger = new converter\cl\converter_logger();
+// $logger->conversion_start();
+// $logger->conversion_end();
+
+
+//echo '['.date('j-n-Y \a\t h:i:s A').']';
 
 ?>
