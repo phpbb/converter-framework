@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/converter/Converter.php';
+require_once __DIR__.'/converter/converter.php';
 require_once __DIR__.'/converter/converter_logger.php';
 require_once __DIR__.'/converter/util_conversion_functions.php';
 // require_once __DIR__.'/vendor/autoload.php';
@@ -14,7 +14,7 @@ require_once __DIR__.'/converter/util_conversion_functions.php';
 // }
 // print_r($source_col);
 // echo '<br/>'.$map_obj->table_def['table_source'];
-$converter_obj = new Converter("phpBBgsoc","root", "123");
+$converter_obj = new converter("phpBBgsoc", "phpBBgsoc_dest", "root", "123");
 //$converter_obj->build_process_queue();
 // $logger = new converter\cl\converter_logger();
 // $logger->conversion_start();
