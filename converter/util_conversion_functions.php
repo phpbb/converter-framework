@@ -3,7 +3,7 @@
 
 function to_upper_case($source_data)
 {
-    return strtoupper($source_data);
+	return strtoupper($source_data);
 }
 
  ?>
