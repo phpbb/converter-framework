@@ -55,6 +55,11 @@ class config_map
 	 */
 	protected $table_destination;
 
+	public $total_rows;
+
+	public static $chunk_size =100;
+
+
 	/**
 	 * config_map constructor.
 	 * @param $con_source
@@ -73,7 +78,7 @@ class config_map
 		$this->set_table();
 		$this->set_col();
 		//$this->get_conversion_function();
-		$this->copy_data();
+		//$this->copy_data();
 	}
 
 	/**
@@ -154,10 +159,55 @@ class config_map
 		}
 	}
 
+	public function copy_data($chunk)
+	{
+		$offset = $chunk*self::$chunk_size;
+		$limit = ($this->total_rows-$offset>self::$chunk_size)?self::$chunk_size:($this->total_rows-$offset);
+		$query_source = $this->db_source->createQueryBuilder(); //Query Builder object;
+		//var_dump($this->table_source);
+		$query_source->select($this->source_col)->from($this->table_source)->setFirstResult($offset)->setMaxResults($limit);
+		$stmt_source = $query_source->execute();
+
+		while ($each_row = $stmt_source->fetch())
+		{ //As every row is fetched keep inserting
+			//Holds final converted values
+			$values_row = array();
+			$values_orig_row = array_values($each_row); //we just want the values and not coloumn names from row
+			//Apply conversion functions to $values_orig_row
+			for ($i = 0; $i < count($values_orig_row); $i++)
+			{
+				if ($this->conversion_function[$i] == null)
+				{ // == used since 0, '', NULL must all get treated same
+					array_push($values_row, $values_orig_row[$i]);
+				} else
+				{
+					array_push($values_row, $this->conversion_function[$i]($values_orig_row[$i]));
+				}
+			}
+			$insert_array = array_combine($this->dest_col, $values_row); //An array of dest-col names as keys and corresponding to be inserted values as pairs.
+			$this->db_destination->insert($this->table_destination, $insert_array);
+
+			 //Debug
+		}
+		print_r("Part ".($chunk+1)." completed");
+		echo '<br/>';
+	}
+
+	public function get_total_records()
+	{
+		$query = 'SELECT COUNT(*) FROM '.$this->table_source;
+//		print($query);
+//		echo '<br/>';
+		$stmt = $this->db_source->prepare($query);
+		$stmt->execute();
+		$this->total_rows = $stmt->fetchColumn(0);
+		return $this->total_rows;
+	}
+
 	/**
 	 * Effects the actual conversion.
 	 */
-	public function copy_data()
+	public function copy_data_OLD()
 	{
 		$query_source = $this->db_source->createQueryBuilder(); //Query Builder object;
 		$query_source->select($this->source_col)->from($this->table_source);

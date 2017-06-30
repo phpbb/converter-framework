@@ -86,7 +86,19 @@ class converter
 	 */
 	function begin_conversion($file)
 	{
+
 		$cf = new config_map($this->con_source, $this->con_destination ,$file);
+		$total_records = $cf->get_total_records();
+		$length = ($total_records/100);
+		echo $total_records;
+		echo '<br/>';
+		for($i=0; $i<$length; $i++)
+		{
+			$cf->copy_data($i);
+		}
+		print_r("Succesfully completed");
+
+
 	}
 }
 
